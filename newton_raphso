@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function for which we want to find the root
+double func(double x) {
+    return x*x - 2;  // Example: f(x) = x^2 - 2
+}
+
+// Derivative of the function
+double func_derivative(double x) {
+    return 2*x;  // Derivative of f(x) = x^2 - 2 is f'(x) = 2x
+}
+
+double newtonRaphson(double x0, int itr) {
+    double x1;
+    for (int i = 0; i < itr; i++) {
+        // Calculate the derivative at the current guess
+        double f_prime = func_derivative(x0);
+        
+        // Check if the derivative is very close to zero
+        if (fabs(f_prime) < 1e-6) {
+            cout << "Derivative is too small. Method may not converge." << endl;
+            return x0;  // Return the current guess as we can't continue
+        }
+
+        // Newton-Raphson formula
+        x1 = x0 - func(x0) / f_prime;
+
+        cout << "Iteration " << i + 1 << ": x1 = " << x1 << endl;
+
+        // Stop if the difference between x1 and x0 is sufficiently small
+        if (fabs(x1 - x0) < 1e-6) {
+            cout << "Converged to a root." << endl;
+            break;  // Stop iteration if convergence is reached
+        }
+
+        x0 = x1;  // Update x0 for the next iteration
+    }
+    return x1;  // Return the final approximation of the root
+}
+
+int main() {
+    double x0 = 1.0;  // Initial guess
+    int iterations = 10;  // Maximum number of iterations
+
+    double root = newtonRaphson(x0, iterations);
+
+    cout << "The root of the equation is approximately: " << root << endl;
+
+    return 0;
+}
