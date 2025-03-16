@@ -1,0 +1,48 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+
+// Function for which we want to find the root
+double func(double x){
+    return x*x - 4;  // Example: f(x) = x^2 - 4 (roots at x = -2 and x = 2)
+}
+
+double secantMethod(double a, double b, int itr) {
+    double c;
+    for (int i = 0; i < itr; i++) {
+        // Secant formula to calculate the next approximation
+        if (func(b) == func(a)) {
+            cout << "Division by zero encountered. The method cannot proceed." << endl;
+            return -1;  // Avoid division by zero
+        }
+
+        // Calculate the next approximation using the secant formula
+        c = b - (func(b) * (b - a)) / (func(b) - func(a));
+
+        // Check if the function value at c is sufficiently close to zero
+        if (fabs(func(c)) < 1e-6) {
+            cout << "Converged to a root." << endl;
+            break;
+        }
+
+        // Print the current approximation
+        cout << "Iteration " << i + 1 << ": c = " << c << endl;
+
+        // Update the interval for the next iteration
+        a = b;
+        b = c;
+    }
+
+    return c;  // Return the final approximation of the root
+}
+
+int main() {
+    double a = 0, b = 3;  // Initial guesses (a and b)
+    int iterations = 7;    // Maximum number of iterations
+
+    double root = secantMethod(a, b, iterations);
+
+    cout << "The root of the equation is approximately: " << root << endl;
+
+    return 0;
+}
