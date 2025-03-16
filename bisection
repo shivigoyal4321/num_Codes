@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define EPSILON 0.01
+
+double func(double x){
+    return x*log(x)-1.2;
+}
+void bisection(double a, double b,int itr){
+    if(func(a)*func(b) >= 0){
+        cout<<"invalid input"<<endl;
+        return;
+    }
+    double c = a;
+    for(int i=0; i<itr; i++){
+        c=(a+b)/2;
+        if(func(c) == 0.0){
+            break;
+        }
+        else if(func(c)*func(a)<0){
+            b=c;
+        }
+        else{
+            a=c;
+        }
+        cout << "The value of root is : "<< c<<endl;
+    }
+}
+int main(){
+
+    double a =1, b = 2;
+    bisection(a, b,12);
+    return 0;
+
+}
