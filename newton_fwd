@@ -1,40 +1,57 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <iomanip>
+
+#define MAX 10  // Maximum number of data points
+
 using namespace std;
 
-int main(){
-float x[10],y[10][10];
-int i,j,n;
-cout<<"enter the number of data"<<endl;
-cin>>n;
-cout<<"enter data :  "<<endl;
-for(i=0; i<n; i++){
-    cout<<"x["<<i<<"] = "<<endl;
-    cin>>x[i];
-    cout<<"y["<<i<<"] = "<<endl;
-    cin>>y[i][0];
-}
+int main() {
+    int n;
+    double x[MAX], y[MAX][MAX], value, h, p, result, term;
 
-for(i = 1; i < n; i++)
-{
- for(j = 0; j < n-i; j++)
- {
-  y[j][i] = y[j+1][i-1] - y[j][i-1];
- }
-}
+    // Taking number of data points as input
+    cout << "Enter the number of data points: ";
+    cin >> n;
 
-/* Displaying Forward Difference Table */
-cout << endl << "FORWARD DIFFERENCE TABLE" << endl;
-for(i = 0; i < n; i++)
-{
- cout << x[i];
- for(j = 0; j < n-i ; j++)
- {
-  cout << "\t" << y[i][j];
- }
- cout << endl;
-}
+    // Input all x values at once
+    cout << "Enter " << n << " values of x: ";
+    for (int i = 0; i < n; i++) {
+        cin >> x[i];
+    }
 
+    // Input all y values at once
+    cout << "Enter " << n << " corresponding values of y: ";
+    for (int i = 0; i < n; i++) {
+        cin >> y[i][0];  // First column stores y values
+    }
 
+    // Compute the forward difference table
+    for (int j = 1; j < n; j++) {  // Columns
+        for (int i = 0; i < n - j; i++) {  // Rows
+            y[i][j] = y[i + 1][j - 1] - y[i][j - 1];
+        }
+    }
+
+    // Input the value of x for which y is required
+    cout << "\nEnter the value of x for which you want to find y: ";
+    cin >> value;
+
+    // Compute h and p
+    h = x[1] - x[0];
+    p = (value - x[0]) / h;
+
+    // Compute the interpolated value using Newton's forward formula
+    result = y[0][0];  // First term
+    term = 1;  // To store p, p(p-1), p(p-1)(p-2), ...
+
+    for (int i = 1; i < n; i++) {
+        term *= (p - (i - 1)) / i;  // Compute the term coefficient
+        result += term * y[0][i];   // Add corresponding difference term
+    }
+
+    // Output the result
+    cout << fixed << setprecision(6);
+    cout << "\nFor x = " << value << ", interpolated y = " << result << endl;
 
     return 0;
 }
